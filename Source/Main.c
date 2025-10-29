@@ -1,5 +1,6 @@
 #include <Constants.h>
 #include <Bee.h>
+#include <Obstacle.h>
 #include <SDL3/SDL.h>
 
 int main(void)
@@ -22,6 +23,8 @@ int main(void)
 
     Bee bee;
     Bee_Initialize(&bee);
+
+    ObstacleList obstacles = {0};
 
     Uint64 previousTicks = SDL_GetTicksNS();
     bool running = true;
@@ -46,14 +49,18 @@ int main(void)
         }
 
         Bee_Update(&bee, deltaTime);
+        Obstacles_Update(&obstacles, deltaTime);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
         Bee_Draw(&bee, renderer);
+        Obstacles_Draw(&obstacles, renderer);
 
         SDL_RenderPresent(renderer);
     }
+
+    Obstacles_Free(&obstacles);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
