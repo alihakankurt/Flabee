@@ -3,8 +3,8 @@
 
 void Bee_Initialize(Bee* bee)
 {
-    bee->PositionX = WINDOW_WIDTH / 20.0f;
-    bee->PositionY = WINDOW_HEIGHT / 2.0f;
+    bee->PositionX = BEE_START_POSITION_X;
+    bee->PositionY = BEE_START_POSITION_Y;
     bee->VelocityY = 0.0f;
 }
 

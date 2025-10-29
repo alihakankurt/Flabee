@@ -1,4 +1,5 @@
 #include <Obstacle.h>
+#include <Constants.h>
 
 #include <stdlib.h>
 
@@ -40,7 +41,8 @@ void Obstacles_Update(ObstacleList* obstacles, float deltaTime)
         obstacles->Last = NULL;
     }
 
-    if (obstacles->Last == NULL || WINDOW_WIDTH - (int)obstacles->Last->PositionX >= OBSTACLE_SPACE_X)
+    Obstacle* last = obstacles->Last;
+    if (last == NULL || WINDOW_WIDTH - (int)last->PositionX >= OBSTACLE_SPACE_X)
     {
         Obstacle* obstacle = malloc(sizeof(Obstacle));
         obstacle->Next = NULL;
@@ -48,12 +50,17 @@ void Obstacles_Update(ObstacleList* obstacles, float deltaTime)
 
         obstacle->GapY = OBSTACLE_MIN_GAP_Y + (rand() / (float)RAND_MAX) * (OBSTACLE_MAX_GAP_Y - OBSTACLE_MIN_GAP_Y);
 
-        if (obstacles->Last == NULL)
+        if (last == NULL)
         {
             obstacles->First = obstacle;
         }
         else
         {
+            if (obstacle->GapY < last->GapY + BEE_JUMP_SPEED)
+            {
+                obstacle->GapY = last->GapY + BEE_JUMP_SPEED;
+            }
+
             obstacles->Last->Next = obstacle;
         }
 

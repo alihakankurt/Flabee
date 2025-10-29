@@ -3,10 +3,6 @@
 
 #include <SDL3/SDL_render.h>
 
-#define BEE_SIZE (WINDOW_WIDTH / 16.0f)
-#define BEE_GRAVITY (WINDOW_HEIGHT * 1.4f)
-#define BEE_JUMP_SPEED (WINDOW_HEIGHT * -0.7f)
-
 typedef struct Bee
 {
     float PositionX;
