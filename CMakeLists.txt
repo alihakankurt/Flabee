@@ -40,5 +40,6 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         Source/Bee.c
         Source/Obstacle.c
+        Source/Collision.c
         Source/Main.c
 )

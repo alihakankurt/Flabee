@@ -1,6 +1,7 @@
 #include <Constants.h>
 #include <Bee.h>
 #include <Obstacle.h>
+#include <Collision.h>
 #include <SDL3/SDL.h>
 
 int main(void)
@@ -51,7 +52,15 @@ int main(void)
         Bee_Update(&bee, deltaTime);
         Obstacles_Update(&obstacles, deltaTime);
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        if (IsCollide(&bee, &obstacles))
+        {
+            SDL_SetRenderDrawColor(renderer, 100, 0, 100, 255);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        }
+
         SDL_RenderClear(renderer);
 
         Bee_Draw(&bee, renderer);

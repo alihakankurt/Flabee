@@ -76,7 +76,7 @@ void Obstacles_Draw(ObstacleList* obstacles, SDL_Renderer* renderer)
     while (it != NULL)
     {
         const SDL_FRect topRect = {it->PositionX, 0, OBSTACLE_WIDTH, it->GapY};
-        const SDL_FRect bottomRect = {it->PositionX, it->GapY + OBSTACLE_GAP_WIDTH, OBSTACLE_WIDTH, WINDOW_HEIGHT - it->GapY};
+        const SDL_FRect bottomRect = {it->PositionX, it->GapY + OBSTACLE_GAP_HEIGHT, OBSTACLE_WIDTH, WINDOW_HEIGHT - it->GapY};
         SDL_RenderFillRect(renderer, &topRect);
         SDL_RenderFillRect(renderer, &bottomRect);
         it = it->Next;
