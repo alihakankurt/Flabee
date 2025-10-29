@@ -38,5 +38,6 @@ target_include_directories(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        Source/Bee.c
         Source/Main.c
 )

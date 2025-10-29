@@ -1,8 +1,6 @@
+#include <Constants.h>
+#include <Bee.h>
 #include <SDL3/SDL.h>
-
-const char* Title = "Flabee";
-int WindowWidth = 1280;
-int WindowHeight = 720;
 
 int main(void)
 {
@@ -14,20 +12,16 @@ int main(void)
 
     SDL_Window* window;
     SDL_Renderer* renderer;
-    if (!SDL_CreateWindowAndRenderer(Title, WindowWidth, WindowHeight, SDL_WINDOW_RESIZABLE, &window, &renderer))
+    if (!SDL_CreateWindowAndRenderer(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, &window, &renderer))
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Window/Renderer Creation Failure", "Unable to create window or renderer", 0);
         return 1;
     }
 
-    SDL_SetRenderLogicalPresentation(renderer, WindowWidth, WindowHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    SDL_SetRenderLogicalPresentation(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
-    float positionX = WindowWidth / 20.0f;
-    float positionY = WindowHeight / 2.0f;
-    float velocityY = 0;
-
-    float gravity = 800;
-    float jumpSpeed = 300;
+    Bee bee;
+    Bee_Initialize(&bee);
 
     Uint64 previousTicks = SDL_GetTicksNS();
     bool running = true;
@@ -46,20 +40,17 @@ int main(void)
                     running = false;
                     break;
                 case SDL_EVENT_KEY_DOWN:
-                    velocityY = -jumpSpeed;
+                    Bee_Jump(&bee);
                     break;
             }
         }
 
-        velocityY += gravity * deltaTime;
-        positionY += velocityY * deltaTime;
+        Bee_Update(&bee, deltaTime);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        const SDL_FRect rect = {positionX, positionY, 30, 30};
-        SDL_SetRenderDrawColor(renderer, 160, 160, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
+        Bee_Draw(&bee, renderer);
 
         SDL_RenderPresent(renderer);
     }
