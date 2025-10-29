@@ -1,0 +1,47 @@
+## OS-specific files
+.DS_Store
+Thumbs.db
+
+## IDE files
+.cache/
+.vscode/
+.idea/
+.zed/
+
+## Build directories
+[Bb]in/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+
+## Object files
+*.o
+*.obj
+
+## Linker output
+*.ilk
+*.map
+*.exp
+
+## Precompiled Headers
+*.gch
+*.pch
+
+## Libraries
+*.lib
+*.a
+
+## Shared objects
+*.dll
+*.so
+*.so.*
+*.dylib
+
+## Executables
+*.exe
+*.out
+*.app
+
+## Debug files
+*.dSYM/
+*.pdb
