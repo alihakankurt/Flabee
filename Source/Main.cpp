@@ -22,9 +22,21 @@ int main(int argc, const char* argv[])
 
     SDL_SetRenderLogicalPresentation(renderer, WindowWidth, WindowHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
+    float positionX = WindowWidth / 20.0f;
+    float positionY = WindowHeight / 2.0f;
+    float velocityY = 0;
+
+    float gravity = 800;
+    float jumpSpeed = 300;
+
+    Uint64 previousTicks = SDL_GetTicksNS();
     bool running = true;
     while (running)
     {
+        Uint64 currentTicks = SDL_GetTicksNS();
+        float deltaTime = (currentTicks - previousTicks) / 1000000000.0f;
+        previousTicks = currentTicks;
+
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -33,15 +45,21 @@ int main(int argc, const char* argv[])
                 case SDL_EVENT_QUIT:
                     running = false;
                     break;
+                case SDL_EVENT_KEY_DOWN:
+                    velocityY = -jumpSpeed;
+                    break;
             }
         }
+
+        velocityY += gravity * deltaTime;
+        positionY += velocityY * deltaTime;
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        const SDL_FRect rect{0,0,30,30};
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderRect(renderer, &rect);
+        const SDL_FRect rect{positionX,positionY,30,30};
+        SDL_SetRenderDrawColor(renderer, 160, 160, 0, 255);
+        SDL_RenderFillRect(renderer, &rect);
 
         SDL_RenderPresent(renderer);
     }
