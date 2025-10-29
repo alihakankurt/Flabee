@@ -5,7 +5,6 @@
 
 typedef struct Bee
 {
-    float PositionX;
     float PositionY;
     float VelocityY;
 } Bee;
