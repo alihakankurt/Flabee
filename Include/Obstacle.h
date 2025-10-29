@@ -17,7 +17,7 @@ typedef struct ObstacleList
 } ObstacleList;
 
 void Obstacles_Free(ObstacleList* obstacles);
-void Obstacles_Update(ObstacleList* obstacles, float deltaTime);
+int Obstacles_Update(ObstacleList* obstacles, float deltaTime);
 void Obstacles_Draw(ObstacleList* obstacles, SDL_Renderer* renderer);
 
 #endif

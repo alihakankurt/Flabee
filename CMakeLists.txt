@@ -41,5 +41,6 @@ target_sources(${PROJECT_NAME}
         Source/Bee.c
         Source/Obstacle.c
         Source/Collision.c
+        Source/Game.c
         Source/Main.c
 )

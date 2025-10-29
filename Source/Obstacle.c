@@ -17,12 +17,20 @@ void Obstacles_Free(ObstacleList* obstacles)
     obstacles->Last = NULL;
 }
 
-void Obstacles_Update(ObstacleList* obstacles, float deltaTime)
+int Obstacles_Update(ObstacleList* obstacles, float deltaTime)
 {
+    int deltaScore = 0;
+
     Obstacle* it = obstacles->First;
     while (it != NULL)
     {
+        float previousX = it->PositionX;
         it->PositionX += OBSTACLE_SPEED_X * deltaTime;
+
+        if (BEE_POSITION_X < previousX + OBSTACLE_WIDTH && BEE_POSITION_X >= it->PositionX + OBSTACLE_WIDTH)
+        {
+            ++deltaScore;
+        }
 
         if (it->PositionX <= -OBSTACLE_WIDTH)
         {
@@ -66,6 +74,8 @@ void Obstacles_Update(ObstacleList* obstacles, float deltaTime)
 
         obstacles->Last = obstacle;
     }
+
+    return deltaScore;
 }
 
 void Obstacles_Draw(ObstacleList* obstacles, SDL_Renderer* renderer)
