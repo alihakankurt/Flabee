@@ -210,8 +210,8 @@ InsertTrailingCommas: None
 
 # Insert integer literal seperators to make it more readable.
 IntegerLiteralSeparator:
-    Binary: 4
-    Decimal: 3
+    Binary: 0
+    Decimal: 0
     Hex: 0
 
 # Don't keep more than 1 empty lines around the source file.
