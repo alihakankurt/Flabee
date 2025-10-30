@@ -1,7 +1,7 @@
 #include <Collision.h>
 #include <Constants.h>
 
-bool IsCollide(Bee* bee, ObstacleList* obstacles)
+bool IsCollide(const Bee* bee, const ObstacleList* obstacles)
 {
     float beeTop = bee->PositionY;
     float beeBottom = bee->PositionY + BEE_SIZE;

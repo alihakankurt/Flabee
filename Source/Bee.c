@@ -19,7 +19,7 @@ void Bee_Jump(Bee* bee)
     bee->VelocityY = BEE_JUMP_SPEED;
 }
 
-void Bee_Draw(Bee* bee, SDL_Renderer* renderer)
+void Bee_Draw(const Bee* bee, SDL_Renderer* renderer)
 {
     float frame = 0;
     if (bee->VelocityY < BEE_JUMP_SPEED / 2)

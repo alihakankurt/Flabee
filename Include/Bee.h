@@ -12,6 +12,6 @@ typedef struct Bee
 void Bee_Initialize(Bee* bee);
 void Bee_Update(Bee* bee, float deltaTime);
 void Bee_Jump(Bee* bee);
-void Bee_Draw(Bee* bee, SDL_Renderer* renderer);
+void Bee_Draw(const Bee* bee, SDL_Renderer* renderer);
 
 #endif

@@ -79,7 +79,7 @@ int Obstacles_Update(ObstacleList* obstacles, float deltaTime)
     return deltaScore;
 }
 
-void Obstacles_Draw(ObstacleList* obstacles, SDL_Renderer* renderer)
+void Obstacles_Draw(const ObstacleList* obstacles, SDL_Renderer* renderer)
 {
     Obstacle* it = obstacles->First;
     while (it != NULL)

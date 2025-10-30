@@ -5,6 +5,6 @@
 #include <Bee.h>
 #include <Obstacle.h>
 
-bool IsCollide(Bee* bee, ObstacleList* obstacles);
+bool IsCollide(const Bee* bee, const ObstacleList* obstacles);
 
 #endif

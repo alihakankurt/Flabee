@@ -18,6 +18,6 @@ typedef struct ObstacleList
 
 void Obstacles_Free(ObstacleList* obstacles);
 int Obstacles_Update(ObstacleList* obstacles, float deltaTime);
-void Obstacles_Draw(ObstacleList* obstacles, SDL_Renderer* renderer);
+void Obstacles_Draw(const ObstacleList* obstacles, SDL_Renderer* renderer);
 
 #endif

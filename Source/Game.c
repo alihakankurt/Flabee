@@ -39,6 +39,7 @@ bool Game_Initialize(Game* game)
     game->Obstacles = (ObstacleList){0};
     game->Score = 0;
     game->BestScore = 0;
+    game->State = GAME_PLAYING;
 
     return true;
 }
@@ -112,14 +113,18 @@ void Game_Update(Game* game, float deltaTime)
 void RenderScore(SDL_Renderer* renderer, int score, float scorePositionY)
 {
     int digitCount = 0;
-    int scoreDigits[10] = {0};
+    int scoreDigits[10];
     while (score > 0)
     {
         scoreDigits[digitCount++] = score % 10;
         score /= 10;
     }
 
-    if (digitCount == 0) digitCount = 1;
+    if (digitCount == 0)
+    {
+        digitCount = 1;
+        scoreDigits[0] = 0;
+    }
 
     float scorePositionX = SCOREBOARD_POSITION_X + (SCOREBOARD_WIDTH - digitCount * DIGITS_WIDTH) / 2.0f;
 

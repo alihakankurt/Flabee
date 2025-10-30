@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 4.0.1)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(Flabee
-    VERSION 0.0.1
+    VERSION 0.1.0
     DESCRIPTION "It's a flapping bee."
     LANGUAGES C
 )
@@ -47,3 +47,23 @@ target_sources(${PROJECT_NAME}
         Source/Game.c
         Source/Main.c
 )
+
+if (APPLE AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_BUNDLE_NAME "Flabee"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "com.alihakankurt.flabee"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2025 Ali Hakan Kurt"
+    )
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/Assets
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>/../Resources/Assets
+    )
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreFoundation")
+endif()
