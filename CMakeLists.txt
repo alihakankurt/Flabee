@@ -25,10 +25,12 @@ target_compile_options(${PROJECT_NAME}
 )
 
 add_subdirectory(External/SDL)
+add_subdirectory(External/SDL_image)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         SDL3::SDL3
+        SDL3_image::SDL3_image
 )
 
 target_include_directories(${PROJECT_NAME}
