@@ -37,6 +37,7 @@ bool Game_Initialize(Game* game)
 
     Bee_Initialize(&game->Beee);
     game->Obstacles = (ObstacleList){0};
+    game->Score = 0;
     game->BestScore = 0;
 
     return true;
@@ -65,27 +66,68 @@ void Game_Update(Game* game, float deltaTime)
         switch (event.type)
         {
             case SDL_EVENT_QUIT:
-                game->Running = false;
+                game->State = GAME_QUIT;
                 break;
+
             case SDL_EVENT_KEY_DOWN:
-                Bee_Jump(&game->Beee);
+                if (game->State == GAME_PLAYING && !event.key.repeat)
+                {
+                    Bee_Jump(&game->Beee);
+                }
+                else if (game->State == GAME_DEATH)
+                {
+                    game->State = GAME_PLAYING;
+
+                    if (game->Score > game->BestScore)
+                    {
+                        game->BestScore = game->Score;
+                    }
+
+                    Bee_Initialize(&game->Beee);
+                    Obstacles_Free(&game->Obstacles);
+
+                    game->Score = 0;
+                }
                 break;
         }
     }
 
-    Bee_Update(&game->Beee, deltaTime);
-    game->Score += Obstacles_Update(&game->Obstacles, deltaTime);
-
-    if (IsCollide(&game->Beee, &game->Obstacles))
+    if (game->State == GAME_PLAYING)
     {
-        Bee_Initialize(&game->Beee);
-        Obstacles_Free(&game->Obstacles);
-        if (game->Score > game->BestScore)
-        {
-            game->BestScore = game->Score;
-        }
+        Bee_Update(&game->Beee, deltaTime);
+        game->Score += Obstacles_Update(&game->Obstacles, deltaTime);
 
-        game->Score = 0;
+        if (IsCollide(&game->Beee, &game->Obstacles))
+        {
+            game->State = GAME_DEATH;
+
+            if (game->BestScore < game->Score)
+            {
+                game->BestScore = game->Score;
+            }
+        }
+    }
+}
+
+void RenderScore(SDL_Renderer* renderer, int score, float scorePositionY)
+{
+    int digitCount = 0;
+    int scoreDigits[10] = {0};
+    while (score > 0)
+    {
+        scoreDigits[digitCount++] = score % 10;
+        score /= 10;
+    }
+
+    if (digitCount == 0) digitCount = 1;
+
+    float scorePositionX = SCOREBOARD_POSITION_X + (SCOREBOARD_WIDTH - digitCount * DIGITS_WIDTH) / 2.0f;
+
+    for (int i = 0; i < digitCount; ++i)
+    {
+        const SDL_FRect scoreSrcRect = {scoreDigits[digitCount - i - 1] * DIGITS_SPRITE_WIDTH, 0.0f, DIGITS_SPRITE_WIDTH, DIGITS_SPRITE_WIDTH};
+        const SDL_FRect scoreDstRect = {scorePositionX + DIGITS_WIDTH * i, SCOREBOARD_POSITION_Y + scorePositionY, DIGITS_WIDTH, DIGITS_WIDTH};
+        SDL_RenderTexture(renderer, Assets.Digits, &scoreSrcRect, &scoreDstRect);
     }
 }
 
@@ -99,6 +141,15 @@ void Game_Render(Game* game)
     Bee_Draw(&game->Beee, game->Renderer);
     Obstacles_Draw(&game->Obstacles, game->Renderer);
 
+    if (game->State == GAME_DEATH)
+    {
+        const SDL_FRect dstRect = {SCOREBOARD_POSITION_X, SCOREBOARD_POSITION_Y, SCOREBOARD_WIDTH, SCOREBOARD_HEIGHT};
+        SDL_RenderTexture(game->Renderer, Assets.Scoreboard, NULL, &dstRect);
+
+        RenderScore(game->Renderer, game->Score, SCORE_POSITION_Y);
+        RenderScore(game->Renderer, game->BestScore, BEST_SCORE_POSITION_Y);
+    }
+
     SDL_RenderPresent(game->Renderer);
 }
 
@@ -111,7 +162,7 @@ int Game_Run()
     }
 
     Uint64 previousTicks = SDL_GetTicksNS();
-    while (game.Running)
+    while (game.State != GAME_QUIT)
     {
         Uint64 currentTicks = SDL_GetTicksNS();
         float deltaTime = (currentTicks - previousTicks) / 1000000000.0f;

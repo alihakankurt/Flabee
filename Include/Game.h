@@ -6,6 +6,13 @@
 #include <Obstacle.h>
 #include <SDL3/SDL.h>
 
+typedef enum GameState
+{
+    GAME_QUIT,
+    GAME_PLAYING,
+    GAME_DEATH,
+} GameState;
+
 typedef struct Game
 {
     SDL_Window* Window;
@@ -14,7 +21,7 @@ typedef struct Game
     ObstacleList Obstacles;
     int Score;
     int BestScore;
-    bool Running;
+    GameState State;
 } Game;
 
 int Game_Run();

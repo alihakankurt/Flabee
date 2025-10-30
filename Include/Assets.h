@@ -9,6 +9,8 @@ struct Assets
     SDL_Texture* Background;
     SDL_Texture* Bee;
     SDL_Texture* Obstacle;
+    SDL_Texture* Scoreboard;
+    SDL_Texture* Digits;
 };
 
 extern struct Assets Assets;
