@@ -52,19 +52,23 @@ void Game_Update(Game* game, float deltaTime)
 
     Bee_Update(&game->Beee, deltaTime);
     game->Score += Obstacles_Update(&game->Obstacles, deltaTime);
+
+    if (IsCollide(&game->Beee, &game->Obstacles))
+    {
+        Bee_Initialize(&game->Beee);
+        Obstacles_Free(&game->Obstacles);
+        if (game->Score > game->BestScore)
+        {
+            game->BestScore = game->Score;
+        }
+
+        game->Score = 0;
+    }
 }
 
 void Game_Render(Game* game)
 {
-    if (IsCollide(&game->Beee, &game->Obstacles))
-    {
-        SDL_SetRenderDrawColor(game->Renderer, 100, 0, 100, 255);
-    }
-    else
-    {
-        SDL_SetRenderDrawColor(game->Renderer, 0, 0, 0, 255);
-    }
-
+    SDL_SetRenderDrawColor(game->Renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->Renderer);
 
     Bee_Draw(&game->Beee, game->Renderer);
