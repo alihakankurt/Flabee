@@ -1,5 +1,6 @@
 #include <Obstacle.h>
 #include <Constants.h>
+#include <Assets.h>
 
 #include <stdlib.h>
 
@@ -80,15 +81,13 @@ int Obstacles_Update(ObstacleList* obstacles, float deltaTime)
 
 void Obstacles_Draw(ObstacleList* obstacles, SDL_Renderer* renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
-
     Obstacle* it = obstacles->First;
     while (it != NULL)
     {
-        const SDL_FRect topRect = {it->PositionX, 0, OBSTACLE_WIDTH, it->GapY};
-        const SDL_FRect bottomRect = {it->PositionX, it->GapY + OBSTACLE_GAP_HEIGHT, OBSTACLE_WIDTH, WINDOW_HEIGHT - it->GapY};
-        SDL_RenderFillRect(renderer, &topRect);
-        SDL_RenderFillRect(renderer, &bottomRect);
+        const SDL_FRect topRect = {it->PositionX, it->GapY, OBSTACLE_WIDTH, -WINDOW_HEIGHT};
+        const SDL_FRect bottomRect = {it->PositionX, it->GapY + OBSTACLE_GAP_HEIGHT, OBSTACLE_WIDTH, WINDOW_HEIGHT};
+        SDL_RenderTexture(renderer, Assets.Obstacle, NULL, &topRect);
+        SDL_RenderTexture(renderer, Assets.Obstacle, NULL, &bottomRect);
         it = it->Next;
     }
 }

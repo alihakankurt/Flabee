@@ -14,10 +14,26 @@ bool Game_Initialize(Game* game)
     if (!SDL_CreateWindowAndRenderer(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, &game->Window, &game->Renderer))
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Window/Renderer Creation Failure", "Unable to create window or renderer", 0);
+
+        SDL_Quit();
         return false;
     }
 
     SDL_SetRenderLogicalPresentation(game->Renderer, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+    if (!Assets_Load(game->Renderer))
+    {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Asset Load Failure", "An asset could not be loaded correctly", 0);
+
+        SDL_DestroyRenderer(game->Renderer);
+        game->Renderer = NULL;
+
+        SDL_DestroyWindow(game->Window);
+        game->Window = NULL;
+
+        SDL_Quit();
+        return false;
+    }
 
     Bee_Initialize(&game->Beee);
     game->Obstacles = (ObstacleList){0};
@@ -30,8 +46,15 @@ void Game_Finalize(Game* game)
 {
     Obstacles_Free(&game->Obstacles);
 
+    Assets_Unload();
+
     SDL_DestroyRenderer(game->Renderer);
+    game->Renderer = NULL;
+
     SDL_DestroyWindow(game->Window);
+    game->Window = NULL;
+
+    SDL_Quit();
 }
 
 void Game_Update(Game* game, float deltaTime)
@@ -70,6 +93,8 @@ void Game_Render(Game* game)
 {
     SDL_SetRenderDrawColor(game->Renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->Renderer);
+
+    SDL_RenderTexture(game->Renderer, Assets.Background, NULL, NULL);
 
     Bee_Draw(&game->Beee, game->Renderer);
     Obstacles_Draw(&game->Obstacles, game->Renderer);

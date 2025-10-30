@@ -1,5 +1,6 @@
 #include <Bee.h>
 #include <Constants.h>
+#include <Assets.h>
 
 void Bee_Initialize(Bee* bee)
 {
@@ -20,7 +21,17 @@ void Bee_Jump(Bee* bee)
 
 void Bee_Draw(Bee* bee, SDL_Renderer* renderer)
 {
-    const SDL_FRect rect = {BEE_POSITION_X, bee->PositionY, BEE_SIZE, BEE_SIZE};
-    SDL_SetRenderDrawColor(renderer, 160, 160, 0, 255);
-    SDL_RenderFillRect(renderer, &rect);
+    float frame = 0;
+    if (bee->VelocityY < BEE_JUMP_SPEED / 2)
+    {
+        frame = 1;
+    }
+    else if (bee->VelocityY < 0)
+    {
+        frame = 2;
+    }
+
+    const SDL_FRect srcRect = {frame * BEE_SPRITE_SIZE, 0, BEE_SPRITE_SIZE, BEE_SPRITE_SIZE};
+    const SDL_FRect dstRect = {BEE_POSITION_X, bee->PositionY, BEE_SIZE, BEE_SIZE};
+    SDL_RenderTexture(renderer, Assets.Bee, &srcRect, &dstRect);
 }
